@@ -11,12 +11,12 @@ import Grid from "@mui/material/Grid2"
 import TextField from '@mui/material/TextField'
 import {Controller, useForm} from "react-hook-form";
 import s from './Login.module.css'
+import * as z from 'zod'
+import {zodResolver} from "@hookform/resolvers/zod";
+import {loginSchema} from "@/features/auth/model/auth-schema.ts";
 
-type LoginInputs = {
-    email: string
-    password: string
-    rememberMe: boolean
-}
+type LoginInputs = z.infer<typeof loginSchema>
+
 
 export const Login = () => {
 
@@ -24,7 +24,10 @@ export const Login = () => {
         defaultValues: {
             email: 'elixafox@gmail.com',
             password: '0000',
-            rememberMe: false}})
+            rememberMe: false
+        },
+        resolver: zodResolver(loginSchema)
+    })
 
     console.log ({errors})
 
@@ -34,8 +37,9 @@ export const Login = () => {
     const theme = getTheme (themeMode)
 
     const onSubmit = (data: LoginInputs) => {
-        reset()
-        console.log (data)}
+        reset ()
+        console.log (data)
+    }
 
     return (
         <Grid container justifyContent={'center'}>
@@ -62,22 +66,29 @@ export const Login = () => {
                 </FormLabel>
                 <form onSubmit={handleSubmit (onSubmit)}>
                     <FormGroup>
-                        <TextField error={!!errors.email} label="Email" margin="normal" {...register ('email',
-                            {
-                                required: {value: true, message: 'Incorrect email address'},
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                                    message: 'Incorrect email address',
-                                }
-                            })} />
+                        <TextField error={!!errors.email} label="Email" margin="normal" {...register ('email'
+                            // {
+                            //     required: {value: true, message: 'Incorrect email address'},
+                            //     pattern: {
+                            //         value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                            //         message: 'Incorrect email address',
+                            //     }}
+                        )} />
                         {errors.email && <span className={s.errrorMessage}>{errors.email.message}</span>}
-                        <TextField type="password" label="Password" margin="normal" {...register ('password')} />
-                        <FormControlLabel label="Remember me" control={ <Controller name= 'rememberMe' control={control} render={({field: {value, ...rest}}) => (
-                            <Checkbox
-                                // onChange={(e) => field.onChange(e.target.checked)}
-                                checked={value} {...rest}
-                            />
-                        )}/>}/>
+                        <TextField error={!!errors.password} type="password" label="Password" margin="normal" {...register ('password')} />
+                        {errors.password && <span className={s.errrorMessage}>{errors.password.message}</span>}
+                        <FormControlLabel label="Remember me" control={<Controller name='rememberMe' control={control}
+                                                                                   render={({
+                                                                                                field: {
+                                                                                                    value,
+                                                                                                    ...rest
+                                                                                                }
+                                                                                            }) => (
+                                                                                       <Checkbox
+                                                                                           // onChange={(e) => field.onChange(e.target.checked)}
+                                                                                           checked={value} {...rest}
+                                                                                       />
+                                                                                   )}/>}/>
 
                         <Button type="submit" variant="contained" color="primary">
                             Login

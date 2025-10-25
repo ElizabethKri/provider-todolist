@@ -1,10 +1,10 @@
-import { setAppStatusAC } from "@/app/app-slice"
-import type { RootState } from "@/app/store"
-import { ResultCode } from "@/common/enums"
-import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
-import { tasksApi } from "@/features/todolists/api/tasksApi"
-import type { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types"
-import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
+import {setAppStatusAC} from "@/app/app-slice"
+import type {RootState} from "@/app/store"
+import {ResultCode} from "@/common/enums"
+import {createAppSlice, handleServerAppError, handleServerNetworkError} from "@/common/utils"
+import {tasksApi} from "@/features/todolists/api/tasksApi"
+import {DomainTask, domainTaskSchema, UpdateTaskModel} from "@/features/todolists/api/tasksApi.types"
+import {createTodolistTC, deleteTodolistTC} from "./todolists-slice"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -27,10 +27,12 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await tasksApi.getTasks(todolistId)
+          // zod 💎
+          domainTaskSchema.array().parse(res.data.items)
           dispatch(setAppStatusAC({ status: "succeeded" }))
           return { todolistId, tasks: res.data.items }
         } catch (error) {
-          handleServerNetworkError(dispatch, error)
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -53,7 +55,7 @@ export const tasksSlice = createAppSlice({
             return rejectWithValue(null)
           }
         } catch (error) {
-          handleServerNetworkError(dispatch, error)
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -76,7 +78,7 @@ export const tasksSlice = createAppSlice({
             return rejectWithValue(null)
           }
         } catch (error) {
-          handleServerNetworkError(dispatch, error)
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -125,7 +127,7 @@ export const tasksSlice = createAppSlice({
             return rejectWithValue(null)
           }
         } catch (error) {
-          handleServerNetworkError(dispatch, error)
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
