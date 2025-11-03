@@ -17,8 +17,6 @@ import { loginSchema } from "@/features/auth/model/auth-schema.ts"
 import { loginTC, selectIsLoggedIn } from "@/features/auth/model/auth-slice.ts"
 import { useNavigate } from "react-router"
 import { Path } from "@/common/components/routing/Routing.tsx"
-import { useEffect } from "react"
-import { Navigate } from "react-router/internal/react-server-client"
 
 type LoginInputs = z.infer<typeof loginSchema>
 
@@ -43,7 +41,7 @@ export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
   console.log("render Login ❤ ️")
 
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  // const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
