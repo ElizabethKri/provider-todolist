@@ -11,14 +11,18 @@ export const handleServerNetworkError = (error: unknown, dispatch: Dispatch): vo
             errorMessage = error.response?.data?.message || error.message
             break
 
+        case error instanceof z.ZodError:
+            console.table(error.issues)
+            console.log('zod')
+            errorMessage = 'Zod error. Смотри консоль'
+            break
+
         case error instanceof Error:
+            console.log('native')
             errorMessage = `Нативная ошибка ` + error.message
             break
 
-        case error instanceof z.ZodError:
-            console.table(error.issues)
-            errorMessage = 'Zod error. Смотри консоль'
-            break
+
 
         default:
             errorMessage = JSON.stringify (error)

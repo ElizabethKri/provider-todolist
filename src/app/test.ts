@@ -6,7 +6,8 @@ const UserShema = z.object({
     email: z.email(),
     site: z.url(),
     error: z.string().nullable(),
-    themeMode: z.literal(['dark', 'light'], 'Невалидный тип')
+    themeMode: z.literal(['dark', 'light'], 'Невалидный тип'),
+    date: z.iso.datetime({local: true}),
 })
 
 type User = z.infer<typeof UserShema>
@@ -17,7 +18,8 @@ const man: User = {
     email: 'xxx@mail.com',
     site: 'https://foo.com',
     error: null,
-    themeMode: 'dark'
+    themeMode: 'dark',
+    date: '2025-10-25T16:07:43.947'
 }
 
 console.log(UserShema.parse(man))
