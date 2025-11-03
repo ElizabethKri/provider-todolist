@@ -14,7 +14,11 @@ import s from "./Login.module.css"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "@/features/auth/model/auth-schema.ts"
-import { loginTC } from "@/features/auth/model/auth-slice.ts"
+import { loginTC, selectIsLoggedIn } from "@/features/auth/model/auth-slice.ts"
+import { useNavigate } from "react-router"
+import { Path } from "@/common/components/routing/Routing.tsx"
+import { useEffect } from "react"
+import { Navigate } from "react-router/internal/react-server-client"
 
 type LoginInputs = z.infer<typeof loginSchema>
 
@@ -27,8 +31,8 @@ export const Login = () => {
     control,
   } = useForm<LoginInputs>({
     defaultValues: {
-      email: "elixafox@gmail.com",
-      password: "0000",
+      email: "post.kri@gmail.com",
+      password: "29238L.k",
       rememberMe: false,
     },
     resolver: zodResolver(loginSchema),
@@ -39,14 +43,35 @@ export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
   console.log("render Login ❤ ️")
 
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 
+  const navigate = useNavigate()
+
   const onSubmit = (data: LoginInputs) => {
-    dispatch(loginTC(data))
+    dispatch(loginTC(data)).then((res: any) => {
+      if (res.payload.isLoggedIn) {
+        navigate(Path.Main)
+      }
+    })
     reset()
     console.log(data)
   }
+
+  // 1 variant
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate(Path.Main)
+  //   }
+  // }, [isLoggedIn])
+
+  // 2 variant
+  // if (isLoggedIn) {
+  //   return <Navigate to={Path.Main} />
+  // }
 
   return (
     <Grid container justifyContent={"center"}>
