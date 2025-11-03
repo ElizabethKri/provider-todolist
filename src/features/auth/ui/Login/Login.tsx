@@ -14,7 +14,7 @@ import s from "./Login.module.css"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "@/features/auth/model/auth-schema.ts"
-import { loginTC, selectIsLoggedIn } from "@/features/auth/model/auth-slice.ts"
+import { loginTC } from "@/features/auth/model/auth-slice.ts"
 import { useNavigate } from "react-router"
 import { Path } from "@/common/components/routing/Routing.tsx"
 
