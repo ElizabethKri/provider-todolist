@@ -25,7 +25,7 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    // reset,
     control,
   } = useForm<LoginInputs>({
     defaultValues: {
@@ -49,12 +49,12 @@ export const Login = () => {
   const navigate = useNavigate()
 
   const onSubmit = (data: LoginInputs) => {
-    dispatch(loginTC(data)).then((res: any) => {
-      if (res.payload.isLoggedIn) {
-        navigate(Path.Main)
-      }
-    })
-    reset()
+    dispatch(loginTC(data))
+      .unwrap()
+      .then(() => {
+        reset()
+      })
+    //reset()
     console.log(data)
   }
 

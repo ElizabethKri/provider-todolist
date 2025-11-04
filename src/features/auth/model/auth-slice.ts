@@ -65,9 +65,37 @@ export const authSlice = createAppSlice({
         },
       },
     ),
+    meTC: create.asyncThunk(
+      async (_arg, { dispatch, rejectWithValue }) => {
+        // логика санки для авторизации
+        try {
+          dispatch(setAppStatusAC({ status: "loading" }))
+          await new Promise((resolve) => {
+            setTimeout(resolve, 1000)
+          })
+          const res = await authApi.me()
+
+          if (res.data.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: "succeeded" }))
+            return { isLoggedIn: true }
+          } else {
+            handleServerAppError(res.data, dispatch)
+            return rejectWithValue(null)
+          }
+        } catch (error) {
+          handleServerNetworkError(error, dispatch)
+          return rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          state.isLoggedIn = action.payload.isLoggedIn
+        },
+      },
+    ),
   }),
 })
 
 export const { selectIsLoggedIn } = authSlice.selectors
-export const { loginTC, logoutTC } = authSlice.actions
+export const { loginTC, logoutTC, meTC } = authSlice.actions
 export const authReducer = authSlice.reducer
