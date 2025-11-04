@@ -15,8 +15,6 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "@/features/auth/model/auth-schema.ts"
 import { loginTC } from "@/features/auth/model/auth-slice.ts"
-import { useNavigate } from "react-router"
-import { Path } from "@/common/components/routing/Routing.tsx"
 
 type LoginInputs = z.infer<typeof loginSchema>
 
@@ -25,7 +23,7 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    // reset,
+    reset,
     control,
   } = useForm<LoginInputs>({
     defaultValues: {
@@ -46,7 +44,7 @@ export const Login = () => {
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
 
   const onSubmit = (data: LoginInputs) => {
     dispatch(loginTC(data))

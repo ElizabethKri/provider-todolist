@@ -8,7 +8,7 @@ import { Routing } from "@/common/components/routing/Routing.tsx"
 import { useEffect, useState } from "react"
 import { meTC } from "@/features/auth/model/auth-slice.ts"
 import { CircularProgress } from "@mui/material"
-import s from "./App.css"
+import "./App.css"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -26,7 +26,7 @@ export const App = () => {
 
   if (!init) {
     return (
-      <div className={s.circularProgressContainer}>
+      <div className="circularProgressContainer">
         <CircularProgress size={150} thickness={3} />
       </div>
     )
@@ -34,7 +34,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={s.app}>
+      <div className="app">
         <CssBaseline />
         <Header />
         <Routing />
