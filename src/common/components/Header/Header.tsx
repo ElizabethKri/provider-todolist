@@ -11,6 +11,8 @@ import Switch from "@mui/material/Switch"
 import Toolbar from "@mui/material/Toolbar"
 import LinearProgress from "@mui/material/LinearProgress"
 import { logoutTC, selectIsLoggedIn } from "@/features/auth/model/auth-slice.ts"
+import { NavLink } from "react-router"
+import { Path } from "@/common/components/routing/Routing.tsx"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -38,7 +40,12 @@ export const Header = () => {
           </IconButton>
           <div>
             {isLoggedIn && <NavButton onClick={logoutHandler}>Logout</NavButton>}
-            <NavButton background={theme.palette.primary.dark}>Faq</NavButton>
+            <NavLink style={{ color: "white", marginRight: "20px" }} to={Path.Main}>
+              Main
+            </NavLink>
+            <NavLink style={{ color: "white" }} to={Path.Faq}>
+              Faq
+            </NavLink>
             <Switch color={"default"} onChange={changeMode} />
           </div>
         </Container>

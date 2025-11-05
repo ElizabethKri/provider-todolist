@@ -1,3 +1,7 @@
 export const Faq = () => {
-  return <div></div>
+  return (
+    <div>
+      <h1>Faq</h1>
+    </div>
+  )
 }
