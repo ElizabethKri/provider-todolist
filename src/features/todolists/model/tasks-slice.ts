@@ -1,16 +1,17 @@
-import {setAppStatusAC} from "@/app/app-slice"
-import type {RootState} from "@/app/store"
-import {ResultCode} from "@/common/enums"
-import {createAppSlice, handleServerAppError, handleServerNetworkError} from "@/common/utils"
-import {tasksApi} from "@/features/todolists/api/tasksApi"
+import { setAppStatusAC } from "@/app/app-slice"
+import type { RootState } from "@/app/store"
+import { ResultCode } from "@/common/enums"
+import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
+import { tasksApi } from "@/features/todolists/api/tasksApi"
 import {
   DomainTask,
   getTasksSchema,
   taskOperationResponseSchema,
-  UpdateTaskModel
+  UpdateTaskModel,
 } from "@/features/todolists/api/tasksApi.types"
-import {createTodolistTC, deleteTodolistTC} from "./todolists-slice"
-import {defaultResponseSchema} from "@/common/types";
+import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
+import { defaultResponseSchema } from "@/common/types"
+import { clearTasksAndTodolists } from "@/common/actions/common.action.ts"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -25,6 +26,9 @@ export const tasksSlice = createAppSlice({
       })
       .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         delete state[action.payload.id]
+      })
+      .addCase(clearTasksAndTodolists.type, () => {
+        return {}
       })
   },
   reducers: (create) => ({
@@ -102,6 +106,7 @@ export const tasksSlice = createAppSlice({
         },
       },
     ),
+
     updateTaskTC: create.asyncThunk(
       async (
         payload: { todolistId: string; taskId: string; domainModel: Partial<UpdateTaskModel> },
